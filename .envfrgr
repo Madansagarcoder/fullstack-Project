@@ -1,0 +1,6 @@
+ show.ejs (13) <!-- &#8377; <%= listing.price.toLocaleString("en-IN") %></li> <br> -->
+
+ ##start - nodemon app.js
+ ##init->index - me id base hi save ki h
+
+ ##MapApi - AIzaSyCDqB0ZX4Do0dLUdbNGLD2VllLT4IS9I2M
