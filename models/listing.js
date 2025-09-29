@@ -1,10 +1,17 @@
 
 const mongoose = require("mongoose");
-const Review = require("./review");   // "review" ko capitalized karna best practice hai
+const Review = require("./review");  
 const { ref } = require("joi");
 const Schema = mongoose.Schema;
 
 const listingSchema = new Schema({
+
+  //gptnech
+  
+    
+   location: String,
+   price: Number,
+
     title: {
         type: String,
         required: true,   
@@ -16,18 +23,7 @@ const listingSchema = new Schema({
             url: String,
             filename: String,
         },
-     //gpt
-  geometry: {
-  type: {
-    type: String,
-    enum: ["Point"],
-    default: "Point"
-  },
-  coordinates: {
-    type: [Number], // [lng, lat]
-    default: [0, 0]
-  }
-},
+  
 
 
     price: Number,
@@ -39,12 +35,25 @@ const listingSchema = new Schema({
             ref: "Review",
         },
     ],
+   
+    
+   
     owner: {
         type: Schema.Types.ObjectId,
         ref: "User",
     },
-   
-});
+     //gpt
+    favorites: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+  hostBio: { type: String, default: "" },
+ 
+
+
+}, { timestamps: true });
 
 listingSchema.post("findOneAndDelete", async (listing) => {
     if (listing) {

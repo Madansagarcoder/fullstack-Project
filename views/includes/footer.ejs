@@ -1,14 +1,263 @@
-<footer>
-    <div class="f-info">
-        <div class="f-info-socials">
-           <i class="fa-brands fa-facebook"></i>
-           <i class="fa-brands fa-square-instagram"></i>
-           <i class="fa-brands fa-square-linkedin"></i>
-        </div>
-        <div class="f-info-brand"> &copy; Wanderlust Private limit</div>
-        <div class="f-info-links">
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
-        </div>
+
+<footer class="footer pt-5 pb-5">
+  <div class="container">
+    <div class="row">
+
+      <!-- Support Section -->
+      <div class="col-12 col-md-4 mb-4">
+        <h6 class="fw-semibold mb-3">Support</h6>
+        <ul class="list-unstyled footer-links">
+          <li><a href="#" class="hover-card" data-card="help">Help Centre</a></li>
+          <li><a href="#" class="hover-card" data-card="safety">Get help with a safety issue</a></li>
+          <li><a href="#" class="hover-card" data-card="disability">Disability support</a></li>
+           
+          <li><a href="#" class="hover-card" data-card="report">Report neighbourhood concern</a></li>
+        </ul>
+      </div>
+
+      <!-- Hosting Section -->
+      <div class="col-12 col-md-4 mb-4">
+        <h6 class="fw-semibold mb-3">Hosting</h6>
+        <ul class="list-unstyled footer-links">
+          <li><a href="/Listings" >Replate your home</a></li>
+          <li><a href="#" class="hover-card" data-card="retreat-experience">Replate your experience</a></li>
+          <li><a href="#" class="hover-card" data-card="hosting-resources">Hosting resources</a></li>
+          <li><a href="#" class="hover-card" data-card="hosting-class">Join a free Hosting class</a></li>
+        </ul>
+      </div>
+
+      <!-- Retreat Section -->
+      <div class="col-12 col-md-4 mb-4">
+        <h6 class="fw-semibold mb-3">Replate</h6>
+        <ul class="list-unstyled footer-links">
+          <li><a href="#" class="hover-card" data-card="summer-release">2025 Summer Release</a></li>
+          <li><a href="#" class="hover-card" data-card="newsroom">Newsroom</a></li>
+          <li><a href="#" class="hover-card" data-card="emergency-stays">Replate.org emergency stays</a></li>
+        </ul>
+      </div>
+
     </div>
+  </div>
+
+  <!-- Popup Card -->
+  <div id="footer-card" class="footer-card">
+    <div class="footer-card-content">
+      <span class="footer-card-close" onclick="closeFooterCard()">&times;</span>
+      <div id="footer-card-body">
+        <p>Hover or click on the links to see details here.</p>
+      </div>
+    </div>
+  </div>
 </footer>
+
+<!-- CSS -->
+<style>
+.footer {
+    background: #f5f5f5;
+    color: #222;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.footer h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #000;
+}
+
+.footer-links li {
+    margin-bottom: 8px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #180808;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.footer-links a:hover {
+    color: #fe424d;
+    text-decoration: underline;
+}
+
+/* Card Popup */
+.footer-card {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    padding: 20px;
+    width: 340px;
+    max-width: 90%;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+    font-size: 0.95rem;
+}
+
+.footer-card.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.footer-card-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: #333;
+}
+
+.footer-card h6 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #222;
+}
+
+.footer-card p, .footer-card ul, .footer-card form {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.footer-card ul {
+    padding-left: 20px;
+}
+
+.footer-card form input, .footer-card form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.footer-card form button {
+    width: 100%;
+    padding: 8px;
+    background: linear-gradient(90deg,#ff385c,#e61e4d,#d70466);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.footer-card form button:hover {
+    background: linear-gradient(90deg,#e02b4d,#d70466,#ff385c);
+}
+
+@media (max-width: 768px) {
+    .footer-card {
+        position: fixed !important;
+        width: 90% !important;
+        left: 5% !important;
+        top: 20% !important;
+    }
+}
+</style>
+
+<!-- JS -->
+
+
+
+<script>
+
+  
+const footerLinks = document.querySelectorAll('.hover-card');
+const popupCard = document.getElementById('footer-card');
+const popupBody = document.getElementById('footer-card-body');
+
+footerLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        showCard(link);
+    });
+});
+
+function showCard(link) {
+    const type = link.getAttribute('data-card');
+    popupBody.innerHTML = getFooterCardContent(type);
+    popupCard.style.display = 'block';
+    setTimeout(()=> popupCard.classList.add('show'), 10);
+
+    const rect = link.getBoundingClientRect();
+    popupCard.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+    popupCard.style.left = (rect.left + window.scrollX) + 'px';
+}
+
+function closeFooterCard() {
+    popupCard.classList.remove('show');
+    setTimeout(()=> popupCard.style.display='none', 300);
+}
+
+function getFooterCardContent(type) {
+    switch(type) {
+        // Support
+        case 'help':
+            return `<h6>Help Centre</h6>
+                <ul>
+                  <li>Emergency: 112</li>
+                  <li>Tourist Assistance: 1800-123-456</li>
+                  <li>Consumer Helpline: 1800-11-4000</li>
+                </ul>`;
+        case 'safety':
+            return `<h6>Safety Guidelines</h6>
+                <ul>
+                  <li>Always verify the host identity.</li>
+                  <li>Meet in public places if possible.</li>
+                  <li>Report suspicious activity immediately.</li>
+                  <li>Use secure payment methods only.</li>
+                </ul>`;
+        case 'disability':
+            return `<h6>Disability Support</h6>
+                <p>Accessible listings are clearly marked. Contact: <a href="mailto:support@example.com">support@example.com</a></p>`;
+        case 'cancellation':
+            return `<h6>Cancellation Options</h6>
+                <form action="/send-cancellation-email" method="POST">
+                    <input type="email" name="email" placeholder="Your email" required>
+                    <textarea name="message" rows="3" placeholder="Write your cancellation request" required></textarea>
+                    <button type="submit">Send Request</button>
+                </form>`;
+        case 'report':
+            return `<h6>Report Neighbourhood Concern</h6>
+                <form action="mailto:yourpersonalemail@example.com" method="POST" enctype="text/plain">
+                    <textarea name="issue" rows="3" placeholder="Describe your concern" required></textarea>
+                    <button type="submit">Send Report</button>
+                </form>`;
+
+        // Hosting
+        case 'retreat-home':
+            return `<h6>Retreat Your Home</h6>
+                    <p>Add your home as a listing, set pricing, availability, and manage bookings easily.</p>`;
+        case 'retreat-experience':
+            return `<h6>Retreat Your Experience</h6>
+                    <p>Create unique experiences like workshops, tours, or local activities. Showcase them to attract guests.</p>`;
+        case 'hosting-resources':
+            return `<h6>Hosting Resources</h6>
+                    <p>Step-by-step guides for adding listings, managing availability, pricing, photos, and guest communication.</p>`;
+        case 'hosting-class':
+            return `<h6>Join a Free Hosting Class</h6>
+                    <p>Learn basics online, attend workshops, tips for guest satisfaction, safety, and certification.</p>`;
+
+        // Retreat
+        case 'summer-release':
+            return `<h6>2025 Summer Release</h6>
+                    <p>Search listings by year and explore new releases and features.</p>`;
+        case 'newsroom':
+            return `<h6>Newsroom</h6>
+                    <p>Latest updates, announcements, and monthly listing news.</p>`;
+        case 'emergency-stays':
+            return `<h6>Retreat.org Emergency Stays</h6>
+                    <p>Quick emergency booking options for urgent needs and assistance.</p>`;
+
+        default:
+            return `<p>No info available</p>`;
+    }
+}
+</script>

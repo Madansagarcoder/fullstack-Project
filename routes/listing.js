@@ -7,18 +7,6 @@ const multer  = require('multer')
 const { storage } = require("../cloudConfig.js");
 const upload = multer({ storage });
 
-//gpt
-// import express from "express";
-// const router = express.Router();
-
-// import wrapAsync from "../utils/wrapAsyc.js";
-// import Listing from "../models/listing.js";
-// import { isLoggedIn, isOwner, validateListing } from "../middleware.js";
-
-// import multer from "multer";
-// import { storage } from "../cloudConfig.js";
-// const upload = multer({ storage });
-
 
 
 
@@ -29,13 +17,15 @@ router.route("/")
 .get(wrapAsyc(listingCollroller.index))
 .post(
   isLoggedIn,
-  
-  upload.single('listing[image]'),
-  
-  validateListing,
-
+  upload.single("listing[image]"),
+   validateListing,
    wrapAsyc(listingCollroller.createListing)
 );
+
+
+
+
+ router.get("/search", (listingCollroller.searchA));
 
 
  
@@ -67,8 +57,16 @@ router.get("/:id/edit",
 
 
 
+router.post("/:id/favorite", 
+  (listingCollroller.faverateHeart));
+  
+
+
+router.post("/:id/updateBio",
+   isLoggedIn, 
+   (listingCollroller.updateBai));
+
 
 
 
  module.exports = router;
-// export default router;

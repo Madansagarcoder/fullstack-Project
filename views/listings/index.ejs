@@ -1,30 +1,104 @@
 <% layout("/layouts/boilerplate") %>
 
 
-  <h3>All Listings</h3>
- <div class=" row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+  <!-- <h3>All Listings</h3> -->
+  <style>
    
-     <% for(let listing of allListings) { %>
-     <a href="/listings/<%= listing._id %>" class="listing-link">
-    <div class="card col listing-card" >
-      <img src="<%= listing.image.url%>" class="card-img-top" 
-      alt="listing_image"
-      style="height: 20rem;"
-      />
 
-       <div class="card-img-overlay">Saftwere</div>
-      <div class="card-body">
-        <h5 class="card-title">
-        <p class="card-text">
-          <b><%= listing.title %></b> <br>
-         &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %>
-        </p>
-      
-      </div>
-    </div>
-    </a>
-  <% } %>
-</div>
+    #tax-info {
+      display: none;
+    }
 
-
+    .tex-toggle {
+      border: 1px solid black;
+      border-radius: 1rem;
+      height: 3.5rem;
+      padding: 1rem;
+      margin-left: auto;
+      display: flex;
+      white-space: nowrap;
+      align-items: center;
+    }
+  </style>
   
+
+
+  <div class=" row row-cols-lg-5 row-cols-md-2 row-cols-sm-2 row-cols-2 mt-4">
+
+    <% for(let listing of allListings) { %>
+      <a href="/listings/<%= listing._id %>" class="listing-link">
+        <div class="card col listing-card mt-4 position-relative">
+          <!-- Listing Image -->
+          <img src="<%= listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 15rem; " />
+
+          <!-- Heart Button -->
+          <form <% if (!currUser) { %>
+            action="/login"
+            <% } else { %>
+              action="/listings/<%= listing._id %>/favorite"
+                <% } %>
+                  method="POST"
+                  class="favorite-form position-absolute"
+                  data-id="<%= listing._id %>"
+                    style="top:15px; right:15px;"
+                    >
+                    <button type="submit" style="background:none; border:none; padding:0; cursor:pointer;">
+                      <% if (listing.favorites && listing.favorites.includes(currUser?._id)) { %>
+                        <i class="fa-solid fa-heart" style="color:red; font-size:24px;"></i>
+                        <% } else { %>
+                          <i class="fa-regular fa-heart" style="color:white; font-size:24px;"></i>
+                          <% } %>
+                    </button>
+          </form>
+
+          <!-- <div class="card-img-overlay">Saftwere</div> -->
+          <div class="card-body">
+             <h5 class="card-text mb-2">
+    <b><%= listing.title %></b>
+  </h5>
+
+  <!-- Price -->
+  <h6 class="card-subtitle mb-2 text-muted">
+    &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %>
+  </h6>
+          </div>
+        </div>
+      </a>
+      <% } %>
+  </div>
+
+
+  <script>
+    document.querySelectorAll(".favorite-form").forEach(form => {
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        // Check if user is logged in
+        const isLoggedIn = <%= currUser ? 'true' : 'false' %>;
+        if (!isLoggedIn) {
+          window.location.href = "/login";
+          return;
+        }
+
+        // Normal AJAX like/unlike
+        let listingId = this.dataset.id;
+        try {
+          let res = await fetch(`/listings/${listingId}/favorite`, {
+            method: "POST",
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+          });
+          let data = await res.json();
+          let icon = this.querySelector("i");
+          if (data.favorited) {
+            icon.classList.remove("fa-regular", "text-dark");
+            icon.classList.add("fa-solid", "text-danger");
+          } else {
+            icon.classList.remove("fa-solid", "text-danger");
+            icon.classList.add("fa-regular", "text-dark");
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    });
+  </script>

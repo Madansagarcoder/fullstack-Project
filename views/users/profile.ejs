@@ -1,0 +1,99 @@
+<% layout("layouts/boilerplate") %>
+
+<h2 class="fw-bold mb-3 pt-4">My Profile</h2>
+<p><strong>Name:</strong> <%= user.username %></p>
+<p><strong>Email:</strong> <%= user.email %></p>
+
+<hr>
+<h3 class="fw-bold">My Listings</h3>
+<div class="row row-cols-lg-5 row-cols-md-2 row-cols-sm-2 row-cols-2 g-3">
+  <% if (!myListings || myListings.length === 0) { %>
+    <p>No listings created yet.</p>
+  <% } else { %>
+    <% myListings.forEach(listing => { %>
+      <div class="col-6 col-md-4 mb-3">
+        <div class="card shadow-sm h-100 ml-2">
+          <img src="<%= listing.image?.url || 'https://via.placeholder.com/300' %>"
+               class="card-img-top"
+               style="height:200px; object-fit:cover;">
+          <div class="card-body px-2 ">
+            <h5><%= listing.title %></h5>
+            <p class="fw-bold ">₹<%= listing.price %></p>
+          </div>
+            <!-- Edit/Delete (if owner) -->
+      <% if (currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
+        <div class="mt-2  text-center mb-3">
+            <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark ml-2">Edit</a>
+            <form method="post" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
+            <button class="btn btn-dark ">Delete</button>
+          </form>
+         </div>
+      <% } %>
+        </div>
+      </div>
+    <% }) %>
+  <% } %>
+</div>
+
+<hr>
+<h3 class="fw-bold">My Reserved Listings</h3>
+<div class="row row-cols-lg-5 row-cols-md-2 row-cols-sm-2 row-cols-2 g-3" id="reservations-row">
+  <% if (!myReservations || myReservations.length === 0) { %>
+    <p>No reservations yet.</p>
+  <% } else { %>
+    <% myReservations.forEach(reservation => { %>
+      <div class="col-6 col-md-4 mb-3 reservation-card" id="reservation-<%= reservation._id %>">
+        <div class="card shadow-sm h-100">
+          <% if (reservation.listing) { %>
+            <img src="<%= reservation.listing.image?.url || 'https://via.placeholder.com/300' %>"
+                 class="card-img-top"
+                 style="height:200px; object-fit:cover;">
+            <div class="card-body px-2">
+              <h5><%= reservation.listing.title %></h5>
+              <p class="fw-bold">₹<%= reservation.listing.price %></p>
+              <p><strong>Check-in:</strong> <%= reservation.checkin.toDateString() %></p>
+              <p><strong>Check-out:</strong> <%= reservation.checkout.toDateString() %></p>
+              <p><strong>Guests:</strong> <%= reservation.guests %></p>
+            </div>
+
+            <div class="text-center mb-3">
+               <form action="/cancel-reservation/<%= reservation._id %>" method="POST" class="d-inline">
+                <textarea name="reason" placeholder="Reason for cancellation" required></textarea>
+                <button type="submit" class="btn btn-dark px-4">Cancel Reservation</button>
+              </form>
+           </div>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  <% } %>
+</div>
+
+<script>
+  document.querySelectorAll('.cancel-reservation-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const reservationId = form.getAttribute('data-id');
+
+      try {
+        const res = await fetch(`/reservations/${reservationId}?_method=DELETE`, {
+          method: 'POST', 
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        });
+
+        if (res.ok) {
+  
+          const card = document.getElementById(`reservation-${reservationId}`);
+          if (card) card.remove();
+        } else {
+          alert('Failed to cancel reservation.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error cancelling reservation.');
+      }
+    });
+  });
+</script>

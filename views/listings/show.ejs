@@ -1,134 +1,383 @@
 <% layout("/layouts/boilerplate") %>
- <script>
-   const mapToken = "<%= process.env.MAP_TOKEN %> "
- </script>
+   <script>
+      const mapToken = "<%= process.env.MAP_TOKEN %>"
+   </script>
 
-   <div class="row mt-3">
-      <div class="col-8 offset-3">
-
-         <body>
-            <h3>
+   <div class="container mt-4">
+      <!-- Title -->
+      <div class="row mt-5 mt-md-4">
+         <div class="col-md-8">
+            <h2 class="fw-bold mb-3">
                <%= listing.title %>
-            </h3>
-      </div>
-      <div class="card col-6 offset-3 show-card listing-card">
-         <img src="<%= listing.image.url%>" class="card-img-top show-image" alt="listing_image">
-         <div class="card-body">
-            <p class="card-text">
-               Owned by
-               <i><b>
-                     <%= listing.owner ? listing.owner.username : " " %>
-                  </b></i>
-            </p>
-
-
-
-            <p class="card-text">
-               <%= listing.description %>
-            </p>
-
-            <p class="card-text"> &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %>
-            </p>
-            <p class="card-text">
-               <%= listing.location %>
-            </p>
-            <p class="card-text">
-               <%= listing.country %>
-            </p>
-
+            </h2>
 
          </div>
       </div>
+      
+      <!-- Image + Details + Booking Card -->
+      <div class="row mt-3 g-0">
+         <!-- Left Side (Image + Description) -->
+         <div class="col-md-8">
+            <div class="col-12 col-md-8  show-card listing-card">
+               <img src="<%= listing.image.url %>" class="card-img-top w-100 show-image" alt="listing image">
 
+               <div class="card-body">
+                  <p class="mb-1 mt-2">
+                     Owned by <i><b>@<%= listing.owner ? listing.owner.username : "Unknown" %></b></i>
+                  </p>
 
-      <br />
-      <!-- yaha loop hai  jo edit our delete optin ko user ko show krta h -->
-      <% if (currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
-         <div class="btns">
-            <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn"> Edit</a>
-
-            <form method="post" action="/listings/<%= listing._id %>?_method=DELETE">
-               <button class="btn btn-dark  offset-5">Delete</button>
-
-            </form>
+                  
+                   <h2 tabindex="-1" 
+                     class="hpipapi atm_71 _1kw7nm4 atm_c8_1x4eueo atm_cs_1kw7nm4 atm_g3_1k7nm4 atm_gi_idpfg4 atm_18_idpfg4 atm_kd_idpfg4_pfnrn2 dir dir-ltr" 
+                    elementtiming="LCP-target">
+                      Entire apartment in <%= listing.location %>, <%= listing.country %>
+                    </h2>
+                  <p class="lead mt-3"
+                     style="line-height: 1.6; word-break: break-word; font-weight: 300; font-size: medium;">
+                     <%= listing.description %>
+                  </p>
+                 
+               </div>
+            </div>
          </div>
-         <% } %>
 
+         <!-- Right Side (Booking Card) -->
+         <div class="col-md-3">
+            <div class="card shadow-sm border-0 rounded-4" style="position: sticky; top: 20px;">
+               <div class="card-body text-center">
+                  <!-- Price -->
+                  <h4 class="fw-bold mb-4">
+                     ₹<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %>
+                        <small class="fw-normal text-muted">day / night</small>
+                  </h4>
 
-            <div class="col-8 offset-3 mb-3">
-               <hr>
-               <% if(currUser) {%>
-                  <h4>leave a Review</h4>
-                  <form action="/listings/<%= listing._id %>/reviews" method="post" novalidate class="needs-validation">
-
-                     <!-- <div class="mb-3 mt-3">
-                        <label for="rating" class="form-label">Rating</label>
-                        <input type="range" class="form-range" min="1" max="5" id="rating" name="review[rating]"
-                           required>
-                     </div> -->
-                     <div class="mb-3 mt-3">
-                        <label for="rating" class="form-label">Rating</label>
-
-                        <fieldset class="starability-slot">
-                           <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1"
-                              checked aria-label="No rating." />
-                           <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                           <label for="first-rate1" title="Terrible">1 star</label>
-                           <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                           <label for="first-rate2" title="Not good">2 stars</label>
-                           <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                           <label for="first-rate3" title="Average">3 stars</label>
-                           <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                           <label for="first-rate4" title="Very good">4 stars</label>
-                           <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                           <label for="first-rate5" title="Amazing">5 stars</label>
-                        </fieldset>
-                     </div>
-                     <div class="mb-3 mt-3">
-                        <label for="comment" class="form-label">Comments</label>
-                        <textarea name="review[comment]" id="comment" class="form-control" cols="30" rows="5"
-                           required></textarea>
-                        <div class="invalid-feedback">Please add comments for review</div>
+                  <!-- Form -->
+                  <form action="/reserve/<%= listing._id %>" method="POST">
+                     <div class="row g-0 border rounded-top">
+                        <div class="col-6 p-2 border-end">
+                           <label class="form-label text-uppercase small fw-bold mb-1">Check-in</label>
+                           <input type="date" name="checkin" class="form-control border-0 shadow-none p-0" required>
+                        </div>
+                        <div class="col-6 p-2">
+                           <label class="form-label text-uppercase small fw-bold mb-1">Check-out</label>
+                           <input type="date" name="checkout" class="form-control border-0 shadow-none p-0" required>
+                        </div>
                      </div>
 
-                     <button class="btn btn-outline-dark">Submit</button>
-                     <% } %>
+                     <div class="p-2 border border-top-0 rounded-bottom">
+                        <label class="form-label text-uppercase small fw-bold mb-1">Guests</label>
+                        <select name="guests" class="form-select border-0 shadow-none p-0">
+                           <option value="1">1 guest</option>
+                           <option value="2">2 guests</option>
+                           <option value="3">3 guests</option>
+                           <option value="4">4 guests</option>
+                           <option value="1">5 guest</option>
+                           <option value="2">6 guests</option>
+                           <option value="3">7 guests</option>
+                           <option value="4">8 guests</option>
+                           <option value="1">9 guest</option>
+                           <option value="2">10 guests</option>
+                           <option value="3">11 guests</option>
+                           <option value="4">12 guests</option>
+                        </select>
+                     </div>
+
+                     <button type="submit" class="btn w-100 text-white fw-bold rounded-pill mt-3 py-2"
+                        style="background: linear-gradient(90deg,#ff385c,#e61e4d,#d70466); font-size: 1rem;">
+                        Reserve
+                     </button>
+                     
+                     <p class="text-center text-muted small mt-2">You won't be charged yet</p>
                   </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Edit/Delete (if owner) -->
+   <% if (currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
+      <div class="mt-3">
+         <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark">Edit</a>
+         <form method="post" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
+            <button class="btn btn-outline-dark">Delete</button>
+         </form>
+      </div>
+      <% } %>
+
+         <!-- Reviews Section -->
+         <div class="mt-5 ">
+            <% if(currUser) { %>
+               <!-- Review Form -->
+               <form action="/listings/<%= listing._id %>/reviews" method="post" class="mb-4">
+                  <div class="mb-3 mt-3  ">
+                     <label for="rating" class="form-label">Rating</label>
+
+                     <fieldset class="starability-slot">
+                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
+                           aria-label="No rating." />
+                        <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                        <label for="first-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                        <label for="first-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                        <label for="first-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                        <label for="first-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                        <label for="first-rate5" title="Amazing">5 stars</label>
+                     </fieldset>
+                  </div>
+                  <div class="mb-3">
+                     <label for="comment" class="form-label">Comment</label>
+                     <textarea name="review[comment]" id="comment" class="form-control" rows="3" required></textarea>
+                  </div>
+                  <button class="btn btn-outline-dark">Submit</button>
+               </form>
+               <% } %>
+         </div>
+         <!-- Reviews Section -->
+         <% if(listing.reviews.length> 0) { %>
+            <div class="row row-cols-1 row-cols-md-2 g-4 ">
+               <% for (let review of listing.reviews) { %>
+                  <div class="col">
+                     <div class="card p-3 shadow-sm border-0 rounded-4 h-100">
+                        <!-- Star + Username -->
+                        <div class="d-flex align-items-center mb-2">
 
 
-                  <% if(listing.reviews.length> 0) { %>
+                           <h6 class="fw-bold mb-0">
+                              <%= review.author.username %>
+                           </h6>
 
+                        </div>
+                        <p class="starability-result mb-2 me-2 " data-rating="<%= review.rating %>"></p>
+
+                        <!-- Comment -->
+                        <p class="text-muted mb-1">
+                           <%= review.comment %>
+                        </p>
+
+                        <!-- Time -->
+                        <time class="timeago review-time" datetime="<%= review.createdAt.toISOString() %>">
+                           <%= review.createdAt.toISOString() %>
+                        </time>
+
+                        <!-- Delete Button (only author) -->
+                        <% if(currUser && review.author._id.equals(currUser._id)) { %>
+                           <form method="post"
+                              action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                              class="mt-2">
+                              <button class="btn btn-sm btn-outline-danger">Delete</button>
+                           </form>
+                           <% } %>
+                     </div>
+                  </div>
+                  <% } %>
+            </div>
+            <% } %>
+               </div>
+
+
+               <!-- Map Section -->
+               <div class="mt-5 py-3 map-wrapper">
+                  <h4>Where you’ll be</h4>
+                  <gmp-map center="28.6139,77.2090" zoom="10" map-id="DEMO_MAP_ID" id="map-id"></gmp-map>
+               </div>
+               </div>
+
+               <script
+                  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=maps&v=beta"
+                  defer></script>
+
+
+
+               <!-- Meet your host section -->
+               <div class="container my-5">
+                  <div class="p-4 p-md-5 bg-white rounded-4 shadow-sm mx-auto" style="max-width: 900px;">
+
+                     <!-- Title -->
+                     <h3 class="fw-semibold mb-4">Meet your host</h3>
 
                      <div class="row">
-                        <p><b>All Reviews</b></p>
-                        <% for (let review of listing.reviews) { %>
-                           <div class="card col-5 ms-3 mb-3">
-                              <div class="card-body">
-                                 <h5 class="card-title">@<%= review.author.username %>
-                                 </h5>
-                                 <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
-                                 <p class="card-text">
-                                    <%= review.comment %>
-                                 </p>
+                        <!-- Left: Host Info -->
+                        <div class="col-md-6 border-end card shadow-sm rounded-4 p-4 mb-4">
+                           <div class="d-flex flex-column flex-md-row align-items-center flex flex-wrap break-words">
+                              <!-- Profile picture -->
+                              <% if(listing.image && listing.image.url){ %>
+                                 <img src="<%= listing.image.url %>"
+                                    class="rounded-circle border shadow-sm mb-3 mb-md-0"
+                                    style="width:90px; height:90px; object-fit:cover;">
+                                 <% } else { %>
+                                    <img src="/images/default-avatar.png"
+                                       class="rounded-circle border shadow-sm mb-3 mb-md-0"
+                                       style="width:90px; height:90px; object-fit:cover;">
+                                    <% } %>
+
+                                       <!-- Host info -->
+                                       <div class="ms-md-3 text-center text-md-start">
+                                          <h5 class="fw-bold mb-1 flex flex-row">
+                                             <%= listing.owner ? listing.owner.username : "Unknown Host" %>
+                                          </h5>
+                                          <div class="text-muted small mb-2">
+                                             <i class="bi bi-star-fill text-warning"></i> 4.9 · Superhost
+                                          </div>
+
+                                        
+
+                                       </div>
+                           </div>
+
+                           <!-- Extra details -->
+                           <div class="row mt-3 text-muted small">
+                              <div class="col-12 mb-1">
+                                 <i class="bi bi-calendar3 me-1"></i>
+                                 <strong>Hosting since:</strong>
+                                 <% if(listing.owner){ %>
+                                    <% let hostingYear; if(listing.owner.createdAt){ hostingYear=new
+                                       Date(listing.owner.createdAt).getFullYear(); } else if(listing.owner._id &&
+                                       listing.owner._id.getTimestamp){
+                                       hostingYear=listing.owner._id.getTimestamp().getFullYear(); } else {
+                                       hostingYear="Unknown" ; } %>
+                                       <%= hostingYear %>
+                                          <% } else { %>
+                                             Unknown
+                                             <% } %>
+                              </div>
+                              <div class="col-12 mb-1">
+                                 <i class="bi bi-envelope me-1"></i>
+                                 <strong>Email:</strong>
+                                 <%= listing.owner ? listing.owner.email : "N/A" %>
 
                               </div>
 
-                              <form class="mb-3" method="post"
-                                 action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                                 <button class="btn btn-dark btn-sm">Delete</button>
-                              </form>
+                              <div class="col-12 mb-1">
+                                 <i class="bi bi-house-door-fill me-1"></i>
+                                 <b> Listings by: </b>
+                                 1
+                              </div>
+
                            </div>
-                           <% } %>
+
+                           <p class="text-muted mb-3 mt-2">
+                              <% if(listing.hostBio && listing.hostBio.length> 0){ %>
+                                 <%= listing.hostBio %>
+
+                                    <% if(currUser && listing.owner &&
+                                       currUser._id.toString()===listing.owner._id.toString()){ %>
+                                       <!-- Owner ke liye Edit button -->
+                                       <button id="editBioBtn" class="btn btn-sm btn-outline-dark ms-2">Edit</button>
+                                       <!-- Hidden form for editing -->
+                                       <form id="bioForm" action="/listings/<%= listing._id %>/updateBio" method="POST"
+                                          class="d-none mt-2">
+                                          <textarea name="hostBio" class="form-control mb-2"
+                                             rows="3"><%= listing.hostBio %></textarea>
+                                          <button type="submit" class="btn btn-dark btn-sm">Save</button>
+                                       </form>
+                                       <% } %>
+
+                                          <% } else { %>
+                                             <% if(currUser && listing.owner &&
+                                                currUser._id.toString()===listing.owner._id.toString()){ %>
+                                                <span id="noBioText">You haven’t added a bio yet.</span>
+                                                <button id="addBioBtn" class="btn btn-sm btn-outline-dark ms-2">Add a
+                                                   bio</button>
+                                                <!-- Hidden form for adding -->
+                                                <form id="bioForm" action="/listings/<%= listing._id %>/updateBio"
+                                                   method="POST" class="d-none mt-2">
+                                                   <textarea name="hostBio" class="form-control mb-2" rows="3"
+                                                      placeholder="Write something about yourself..."></textarea>
+                                                   <button type="submit" class="btn btn-dark btn-sm">Save</button>
+                                                </form>
+                                                <% } else { %>
+                                                   This host hasn’t added a bio yet.
+                                                   <% } %>
+                                                      <% } %>
+                           </p>
+                        </div>
+
+
+                        <!-- Right: Message form + messages -->
+                        <div class="col-md-6 mt-4 mt-md-0">
+                           <h6 class="fw-semibold mb-3">Message Host</h6>
+
+                           <% if(!currUser){ %>
+                              <!-- Agar user login nahi hai -->
+                              <a href="/login?redirect=/listings/<%= listing._id %>?message=true"
+                                 class="btn btn-dark rounded-pill px-4 mb-3">
+                                 Message Host
+                              </a>
+
+                              <% } else { %>
+                                 <!-- Agar login hai (host ya koi bhi user) -->
+                                 <button id="openChatBtn" class="btn btn-dark rounded-pill px-4 mb-3">
+                                    Message Host
+                                 </button>
+
+                                 <!-- Hidden Form -->
+                                 <form id="messageForm" class="d-flex d-none">
+                                    <input type="text" id="messageInput" class="form-control rounded-pill me-2"
+                                       placeholder="Write a message..." required>
+                                    <button type="submit" class="btn btn-dark rounded-pill px-3">Send</button>
+                                 </form>
+
+                                 <!-- Message list -->
+                                 <div id="messageList" class="mt-3" style="max-height:200px; overflow-y:auto;">
+                                    <!-- Messages will appear here -->
+                                 </div>
+                                 <% } %>
+                        </div>
+
                      </div>
-                     <% } %>
-            </div>
-            <div class="col-6 offset-3 mb-3">
-               <h3>where you'll be</h3>
-               <gmp-map  center="37.4220656,-122.0840897" zoom="10" map-id="DEMO_MAP_ID" id="map-id"></gmp-map>
-            </div>
-            
-   </div>
- <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=maps&v=beta"
-      defer
-    ></script>
+                  </div>
+               </div>
+
+
+               
+
+               <section class="explore-options mt-5 border-top">
+  <div class="container py-4">
+    <h5 class="fw-bold mb-3">Explore other options in and around <%= listing.location %></h5>
+    <div class="row">
+      
+      <!-- Column 1 -->
+      <div class="col-12 col-md-4 mb-4">
+        <ul class="list-unstyled explore-links">
+          <li><a href="/city/New Delhi">New Delhi - Holiday rentals</a></li>
+          <li><a href="/city/Delhi">Delhi - Holiday rentals</a></li>
+          <li><a href="/city/Gurugram">Gurugram - Holiday rentals</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 2 -->
+      <div class="col-12 col-md-4 mb-4">
+        <ul class="list-unstyled explore-links">
+          <li><a href="/city/Lahore">Lahore - Holiday rentals</a></li>
+          <li><a href="/city/Jaipur">Jaipur - Holiday rentals</a></li>
+          <li><a href="/city/Noida">Noida - Holiday rentals</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3 -->
+      <div class="col-12 col-md-4 mb-4">
+        <ul class="list-unstyled explore-links">
+          <li><a href="/city/Rishikesh">Rishikesh - Holiday rentals</a></li>
+          <li><a href="/city/Kullu">Kullu - Holiday rentals</a></li>
+          <li><a href="/city/Tehri Garhwal">Tehri Garhwal - Holiday rentals</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+               <link rel="stylesheet"
+                  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+
+               <script src="https://cdn.jsdelivr.net/npm/timeago.js@4.0.2/dist/timeago.min.js"></script>
+               <script>
+                  timeago.render(document.querySelectorAll('.timeago'));
+               </script>

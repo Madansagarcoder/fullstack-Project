@@ -1,10 +1,10 @@
 <% layout("/layouts/boilerplate") %>
 
-    <div class="row mt-3">
-        <h1 class="col-6 offset-2">Singup </h1>
-        <div class="col-8 offset-2">
+  <div class="d-flex justify-content-center align-items-center min-vh-0">
+    <div class="p-5 mt-5 mb-3 bg-white rounded-3 shadow-lg" style="max-width: 400px; width: 100%;">
+        <h2 class="text-center mb-4">SignUp</h2>
              
-            <form action="/singup" method="post" class="needs-validation" novalidate>
+            <form action="/signup" method="post"   class="needs-validation" novalidate>
                   <div class="mb-3">
                     <label for="title" class="form-lable">UserName</label>
                     <input type="text"
@@ -38,7 +38,12 @@
                      required>
                       
                 </div>
-                <button class="btn btn-dark">SingUp</button>
+
+             
+            <button type="submit" 
+                    class="btn btn-dark w-100 rounded-pill shadow-sm mt-3">
+               SignUp
+            </button>
             </form>
             
         

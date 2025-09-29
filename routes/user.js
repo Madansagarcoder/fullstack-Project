@@ -6,10 +6,15 @@ const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware.js");
 
 const userCotroller = require("../controllers/users.js");
+const Listing = require("../models/listing");
+const Reservation = require("../models/reservation");
+const { isLoggedIn } = require("../middleware");
 
-router.route("/singup")
-.get( userCotroller.renderSingupForm)
-.post( wrapAsyc(userCotroller.singup));
+
+router.route("/signup")
+.get( userCotroller.renderSingupForm, )
+
+.post( wrapAsyc(userCotroller.signup));
 
 
 router.route("/login")
@@ -25,7 +30,11 @@ router.route("/login")
      );
 
 
+router.get("/profile",
+   userCotroller.UserProfile );
+
+
+
 router.get("/logout", userCotroller.logout);
 
 module.exports = router;
-// export default router;

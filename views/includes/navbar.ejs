@@ -1,31 +1,151 @@
+
+<style>
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1100;
+  
+}
+
+body {
+  padding-top: 100px;
+}
+   .search-btn {
+     background-color: #fe424d;
+     color: #fff;
+     border-radius: 25px;
+     padding: 0 1rem 0 1rem 0;
+   }
+   .search-btn:hover {
+     background-color: #fe424d;
+    clip-path: #fff;
+   }
+   
+   .search-btn i {
+    display: inline;
+    margin-right: 0.5rem;
+  
+   }
+   .search-inp {
+    border-radius: 25px;
+    padding: 0.5rem 3rem  0.5rem 3rem;
+    font-size: 1rem;
+   }
+   .mobile-search {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    z-index: 1050; 
+  }
+
+  @media(min-width: 768px) {
+    .mobile-search {
+      display: none;
+    }
+  }
+  @media (max-width: 768px) {
+  .navbar-toggler {
+    margin-left: auto; 
+  }
+}
+.desktop-seach {
+  padding-top: 70px;
+}
+
+.fixed-brand {
+  position: fixed;
+  top: 10px;
+  left: 55px;
+  z-index: 1200;
+}
+
+.logo-img {
+  height: 50px;      
+  width: auto;
+  border-radius: 5px;
+  transition: transform 0.2s;
+}
+
+.logo-img:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 992px) {
+  .logo-img {
+    height: 45px;
+  }
+}
+
+
+@media (max-width: 576px) {
+  .logo-img {
+    height: 40px;
+  }
+  .fixed-brand {
+    left: 10px;
+    top: 8px;
+  }
+}
+
+</style>
+
+
+
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-regular fa-compass"></i></a>
-    <button 
-    class="navbar-toggler"
-     type="button" 
-    data-bs-toggle="collapse" 
-    data-bs-target="#navbarNavAltMarkup" 
-   >
+  <div class="container-fluid" style="background-color: #f8f8fd;">
+        <a class="navbar-brand fixed-brand" href="/listings">
+      <img src="/logo.png" alt="Replate Logo" class="logo-img">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/listings">All Listings</a>
-        <a class="nav-link" href="/listings/new">Add new Listing</a>
+
+    <!-- Mobile Search (show on small screens) -->
+
+
+
+
+   <div class="mobile-search d-md-none w-100">
+      <form class="d-flex" role="search" action="/listings/search" method="GET">
+        
+        <input name="q" class="form-control me-2 search-inp" type="search" placeholder="Search Destinations" />
+        <button class="btn search-btn" type="submit">
+          <i class="fa-brands fa-searchengin"></i>Search
+        </button>
+      </form>
+    </div>
+
+
+    <div class="collapse navbar-collapse mt-4" id="navbarNavAltMarkup" style="background-color: #f8f8fd; ">
+
+     
+
+      <!-- Desktop Search -->
+      <div action="/listings/search" method="GET" class="navbar-search ms-auto d-none d-md-flex desktop-seach "  >
+        <form class="d-flex" role="search" action="/listings/search" method="GET">
+          <input   name="q"  class="form-control me-2 search-inp" type="search" placeholder="Search Destinations" />
+          <button class="btn search-btn" type="submit"><i class="fa-brands fa-searchengin"></i>Search</button>
+        </form>
       </div>
 
-       <div class="navbar-nav ms-auto">
-        <% if(!currUser) { %>
-         <a class="nav-link" href="/singup">SingUp</a>
-        <a class="nav-link" href="/login">Log in</a>
-         
-        <% } %>
-        <% if(currUser) { %>
-        <a class="nav-link" href="/logout">Log out</a>
-        <% } %>
-      </div>
+      
+
+<div class="navbar-nav ms-auto mt-2">
+  <a class="nav-link " href="/listings/new"><b><i class="fa-solid fa-plus-circle"></i>Add new Place</b></a>
+
+  <% if (!currentUser) { %>
+    <a class="nav-link " href="/signup"><b><i class="fa-solid fa-user-plus"></i>SignUp</b></a>
+    <a class="nav-link " href="/login"><b> <i class="fa-solid fa-right-to-bracket"></i> Log in</b></a>
+  <% } else { %>
+    <a class="nav-link " href="/profile"><b><i class="fa-regular fa-user"></i> Profile</b></a>
+    <a class="nav-link " href="/logout"><b><i class="fa-solid fa-right-from-bracket"></i> Log out</b></a>
+  <% } %>
+</div>
     </div>
   </div>
 </nav>

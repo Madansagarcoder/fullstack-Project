@@ -24,4 +24,3 @@ router.delete("/:reviewId",
   wrapAsyc(reviewController.deleteReviews));
 
 module.exports = router;
-// export default router;
