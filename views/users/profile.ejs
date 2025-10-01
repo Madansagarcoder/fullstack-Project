@@ -5,10 +5,10 @@
 <p><strong>Email:</strong> <%= user.email %></p>
 
 <hr>
-<h3 class="fw-bold">My Listings</h3>
+<h3 class="fw-bold">My Create Replate</h3>
 <div class="row row-cols-lg-5 row-cols-md-2 row-cols-sm-2 row-cols-2 g-3">
   <% if (!myListings || myListings.length === 0) { %>
-    <p>No listings created yet.</p>
+    <p>No Replate created yet.</p>
   <% } else { %>
     <% myListings.forEach(listing => { %>
       <div class="col-6 col-md-4 mb-3">
@@ -36,7 +36,7 @@
 </div>
 
 <hr>
-<h3 class="fw-bold">My Reserved Listings</h3>
+<h3 class="fw-bold">My Reserved Replate</h3>
 <div class="row row-cols-lg-5 row-cols-md-2 row-cols-sm-2 row-cols-2 g-3" id="reservations-row">
   <% if (!myReservations || myReservations.length === 0) { %>
     <p>No reservations yet.</p>

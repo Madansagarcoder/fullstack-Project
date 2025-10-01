@@ -1,7 +1,7 @@
 <% layout("/layouts/boilerplate") %>
 
 
-  <!-- <h3>All Listings</h3> -->
+ 
   <style>
    
 
@@ -51,7 +51,7 @@
                     </button>
           </form>
 
-          <!-- <div class="card-img-overlay">Saftwere</div> -->
+          
           <div class="card-body">
              <h5 class="card-text mb-2">
     <b><%= listing.title %></b>
@@ -73,14 +73,12 @@
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        // Check if user is logged in
         const isLoggedIn = <%= currUser ? 'true' : 'false' %>;
         if (!isLoggedIn) {
           window.location.href = "/login";
           return;
         }
 
-        // Normal AJAX like/unlike
         let listingId = this.dataset.id;
         try {
           let res = await fetch(`/listings/${listingId}/favorite`, {

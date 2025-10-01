@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const loggedIn = btn.dataset.loggedIn === "true";
 
     if (!loggedIn) {
-      // redirect to login with return URL
+    // redirect to login with return URL
       const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
       window.location.href = `/login?redirect=${returnTo}`;
       return;
